@@ -1,0 +1,26 @@
+plugin:
+  cropwechat_connector:
+    backend:
+      name:
+        other: 企业微信
+      info:
+        name:
+          other: 企业微信连接
+        description:
+          other: 企业微信扫码登陆
+      config:
+        app_id:
+          title:
+            other: 企业ID
+          description:
+            other: 您的企业ID
+        agent_id:
+          title:
+            other: 自建应用ID
+          description:
+            other: 您自建应用的ID
+        crop_secret:
+          title:
+            other: 企业密钥
+          description:
+            other: 企业微信的企业密钥
