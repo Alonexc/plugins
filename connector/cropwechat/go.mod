@@ -1,12 +1,12 @@
-module githut.com/Alone/plugins/connector/cropwechat
+module github.com/alonexc/plugins/connector/cropwechat
 
 go 1.21.0
-
 require (
 	github.com/answerdev/answer v1.1.1
 )
 
 require (
+	cloud.google.com/go/compute/metadata v0.2.0 // indirect
 	github.com/LinkinStars/go-i18n/v2 v2.2.2 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
@@ -15,6 +15,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.14.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/wire v0.5.0 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
@@ -24,6 +25,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.8 // indirect
+	github.com/segmentfault/pacman v1.0.4 // indirect
 	github.com/segmentfault/pacman/contrib/i18n v0.0.0-20230516093754-b76aef1c1150 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	golang.org/x/crypto v0.11.0 // indirect
