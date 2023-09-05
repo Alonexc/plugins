@@ -24,3 +24,8 @@ plugin:
             other: CorpSecret
           description:
             other: Corp secret of your application
+        redirect_uri:
+          title:
+            other: RedirectURI
+          description:
+            other: The redirect URI of the application

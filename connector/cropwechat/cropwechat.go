@@ -16,9 +16,10 @@ type Connector struct {
 }
 
 type ConnectorConfig struct {
-	AppID      string `json:"app_id"`
-	AgentID    string `json:"agent_id"`
-	CropSecret string `json:"crop_secret"`
+	AppID       string `json:"app_id"`
+	AgentID     string `json:"agent_id"`
+	CropSecret  string `json:"crop_secret"`
+	RedirectURI string `json:"redirect_uri"`
 }
 
 func init() {
@@ -59,7 +60,7 @@ func (g *Connector) ConnectorSender(ctx *plugin.GinContext, receiverURL string) 
 			AuthURL:  "https://login.work.weixin.qq.com/wwlogin/sso/login",
 			TokenURL: "https://qyapi.weixin.qq.com/cgi-bin/gettoken",
 		},
-		RedirectURL: receiverURL,
+		RedirectURL: g.Config.RedirectURI,
 		//Scopes:      []string{"user:email"},
 	}
 	return oauthConfig.AuthCodeURL("WWLogin")
@@ -166,6 +167,17 @@ func (g *Connector) ConfigFields() []plugin.ConfigField {
 				InputType: plugin.InputTypeText,
 			},
 			Value: g.Config.CropSecret,
+		},
+		{
+			Name:        "redirect_uri",
+			Type:        plugin.ConfigTypeInput,
+			Title:       plugin.MakeTranslator(i18n.ConfigRedirectURITitle),
+			Description: plugin.MakeTranslator(i18n.ConfigRedirectURIDescription),
+			Required:    false,
+			UIOptions: plugin.ConfigFieldUIOptions{
+				InputType: plugin.InputTypeText,
+			},
+			Value: g.Config.RedirectURI,
 		},
 	}
 }

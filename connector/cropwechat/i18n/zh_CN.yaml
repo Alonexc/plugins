@@ -24,3 +24,8 @@ plugin:
             other: 企业密钥
           description:
             other: 企业微信的企业密钥
+        redirect_uri:
+          title:
+            other: 回调地址
+          description:
+            other: 应用的回调地址
