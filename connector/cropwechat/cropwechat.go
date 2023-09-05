@@ -7,7 +7,6 @@ import (
 	"github.com/answerdev/plugins/connector/github/cropoauth2"
 	"github.com/answerdev/plugins/connector/github/i18n"
 	"net/http"
-	//oauth2GitHub "golang.org/x/oauth2/github"
 )
 
 type Connector struct {

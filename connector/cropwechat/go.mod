@@ -2,12 +2,7 @@ module github.com/answerdev/plugins/connector/github
 
 go 1.19
 
-require (
-	github.com/answerdev/answer v1.1.1
-	github.com/google/go-github/v50 v50.1.0
-	github.com/segmentfault/pacman v1.0.4
-	golang.org/x/oauth2 v0.4.0
-)
+require github.com/answerdev/answer v1.1.2
 
 require (
 	github.com/LinkinStars/go-i18n/v2 v2.2.2 // indirect
@@ -18,8 +13,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.14.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
-	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/wire v0.5.0 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
@@ -35,7 +28,6 @@ require (
 	golang.org/x/net v0.12.0 // indirect
 	golang.org/x/sys v0.10.0 // indirect
 	golang.org/x/text v0.11.0 // indirect
-	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
