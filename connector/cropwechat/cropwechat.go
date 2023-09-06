@@ -132,7 +132,7 @@ func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string
 	metaInfo, _ := json.Marshal(userInfoResp)
 	userInfo = plugin.ExternalLoginUserInfo{
 		ExternalID:  fmt.Sprintf("%s", userInfoData.UserID),
-		DisplayName: userInfoData.Alias,
+		DisplayName: userInfoData.Name,
 		Username:    userInfoData.Name,
 		Email:       userInfoData.Email,
 		MetaInfo:    string(metaInfo),
