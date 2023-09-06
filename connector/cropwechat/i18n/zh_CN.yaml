@@ -29,3 +29,8 @@ plugin:
             other: 回调地址
           description:
             other: 应用的回调地址
+        proxy_ip:
+          title:
+            other: 代理IP
+          description:
+            other: 代理IP地址

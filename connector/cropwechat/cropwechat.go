@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/alonexc/plugins/connector/cropwechat/i18n"
 	"github.com/answerdev/answer/plugin"
+	"github.com/segmentfault/pacman/log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -20,6 +21,7 @@ type ConnectorConfig struct {
 	AgentID     string `json:"agent_id"`
 	CropSecret  string `json:"crop_secret"`
 	RedirectURI string `json:"redirect_uri"`
+	ProxyIP     string `json:"proxy_ip"`
 }
 
 func init() {
@@ -69,48 +71,57 @@ func (g *Connector) ConnectorSender(ctx *plugin.GinContext, receiverURL string) 
 // 根据回调地址获取code以及获取token，以及用户信息
 func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string) (userInfo plugin.ExternalLoginUserInfo, err error) {
 	code := ctx.Query("code")
+	proxyURL, err := url.Parse(g.Config.ProxyIP)
+	if err != nil {
+		log.Error("proxyIP failed", err)
+		return
+	}
+	client := &http.Client{Transport: &http.Transport{
+		Proxy: http.ProxyURL(proxyURL),
+	},
+	}
 	// Exchange code for token
 	// 1.通过code获取企业微信的access_token
-	tokenResp, err := http.Get(fmt.Sprintf(
+	tokenResp, err := client.Get(fmt.Sprintf(
 		"https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s",
 		g.Config.AppID, g.Config.CropSecret))
 	if err != nil {
-		fmt.Errorf("failed getting token: %s", err)
+		log.Errorf("failed getting token: %s", err)
 		return
 	}
 	err = json.NewDecoder(tokenResp.Body).Decode(&tokenData)
 	if err != nil {
-		fmt.Errorf("token data parsing failed: %s", tokenResp.Body)
+		log.Errorf("token data parsing failed: %s", tokenResp.Body)
 		return
 	}
-	fmt.Println(fmt.Sprintf("access_token=%s", tokenData.AccessToken))
+	log.Infof(fmt.Sprintf("access_token=%s", tokenData.AccessToken))
 	defer tokenResp.Body.Close()
 	// 2.通过access_token和code获取userid
-	userIDResp, err := http.Get(fmt.Sprintf(
+	userIDResp, err := client.Get(fmt.Sprintf(
 		"https://qyapi.weixin.qq.com/cgi-bin/auth/getuserinfo?access_token=%s&code=%s",
 		tokenData.AccessToken, code))
 	if err != nil {
-		fmt.Errorf("get userID failed: %s", err)
+		log.Errorf("get userID failed: %s", err)
 		return
 	}
 	err = json.NewDecoder(userIDResp.Body).Decode(&userIDData)
 	if err != nil {
-		fmt.Errorf("userID data parsing failed: %s", err)
+		log.Errorf("userID data parsing failed: %s", err)
 		return
 	}
-	fmt.Println(fmt.Sprintf("UserID = %s, OpenID = %s", userIDData.UserID, userIDData.OpenID))
+	log.Infof(fmt.Sprintf("UserID = %s, OpenID = %s", userIDData.UserID, userIDData.OpenID))
 	userIDResp.Body.Close()
 	// 3.通过access_token和userid获取用户信息
-	userInfoResp, err := http.Get(fmt.Sprintf(
+	userInfoResp, err := client.Get(fmt.Sprintf(
 		"https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=%s&userid=%s",
 		tokenData.AccessToken, userIDData.UserID))
 	if err != nil {
-		fmt.Errorf("get user info faild: %s", err)
+		log.Errorf("get user info faild: %s", err)
 		return
 	}
 	err = json.NewDecoder(userInfoResp.Body).Decode(&userInfoData)
 	if err != nil {
-		fmt.Errorf("user infoData parsing failed: %s", err)
+		log.Errorf("user infoData parsing failed: %s", err)
 		return
 	}
 	userInfoResp.Body.Close()
@@ -178,6 +189,17 @@ func (g *Connector) ConfigFields() []plugin.ConfigField {
 				InputType: plugin.InputTypeText,
 			},
 			Value: g.Config.RedirectURI,
+		},
+		{
+			Name:        "proxy_ip",
+			Type:        plugin.ConfigTypeInput,
+			Title:       plugin.MakeTranslator(i18n.ConfigProxyIPTitle),
+			Description: plugin.MakeTranslator(i18n.ConfigProxyIPDescription),
+			Required:    false,
+			UIOptions: plugin.ConfigFieldUIOptions{
+				InputType: plugin.InputTypeText,
+			},
+			Value: g.Config.ProxyIP,
 		},
 	}
 }
@@ -247,6 +269,7 @@ type Config struct {
 
 	RedirectURL string
 
+	ProxyIP string
 	//Scopes []string
 }
 
@@ -289,5 +312,6 @@ func (c *Config) AuthCodeURL(state string) string {
 		buf.WriteByte('?')
 	}
 	buf.WriteString(v.Encode())
+	log.Infof(fmt.Sprintf("oauthURL=%s", buf.String()))
 	return buf.String()
 }

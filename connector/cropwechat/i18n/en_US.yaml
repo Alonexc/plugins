@@ -2,10 +2,10 @@ plugin:
   cropwechat_connector:
     backend:
       name:
-        other: cropwechat
+        other: CropWechat
       info:
         name:
-          other: cropwechat Connector
+          other: CropWechat Connector
         description:
           other: Connection crop wechat swipe login.
       config:
@@ -29,3 +29,8 @@ plugin:
             other: RedirectURI
           description:
             other: The redirect URI of the application
+        proxy_ip:
+          title:
+            other: ProxyIP
+          description:
+            other: Proxy ip address

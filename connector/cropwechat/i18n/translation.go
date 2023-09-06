@@ -12,4 +12,6 @@ const (
 	ConfigCropSecretDescription  = "plugin.cropwechat_connector.backend.config.crop_secret.description"
 	ConfigRedirectURITitle       = "plugin.cropwechat_connector.backend.config.redirect_uri.title"
 	ConfigRedirectURIDescription = "plugin.cropwechat_connector.backend.config.redirect_uri.description"
+	ConfigProxyIPTitle           = "plugin.cropwechat_connector.backend.config.proxy_ip.title"
+	ConfigProxyIPDescription     = "plugin.cropwechat_connector.backend.config.proxy_ip.description"
 )
