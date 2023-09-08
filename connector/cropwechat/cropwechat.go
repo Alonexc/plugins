@@ -115,13 +115,16 @@ func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string
 		"https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=%s&userid=%s",
 		tokenData.AccessToken, userIDData.UserID))
 	if err != nil {
-		log.Errorf("get user info faild: %s", err)
+		log.Errorf("get user info failed: %s", err)
 		return
 	}
 	err = json.NewDecoder(userInfoResp.Body).Decode(&userInfoData)
 	if err != nil {
 		log.Errorf("user infoData parsing failed: %s", err)
 		return
+	}
+	if len(userInfoData.Email) == 0 {
+		userInfoData.Email = fmt.Sprintf("%s%s", userInfoData.UserID, "@webank.com")
 	}
 	userInfoResp.Body.Close()
 	fmt.Println(fmt.Sprintf("UserID=%s, Name=%s, Email=%s, Avatar=%s",
