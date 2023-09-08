@@ -53,22 +53,21 @@ func (g *Connector) ConnectorSlugName() string {
 	return "cropwechat"
 }
 
-// 构造扫码登陆地址
+// ConnectorSender Constructing a code-sweeping login address
 func (g *Connector) ConnectorSender(ctx *plugin.GinContext, receiverURL string) (redirectURL string) {
 	oauthConfig := &Config{
 		AppID:   g.Config.AppID,
 		AgentID: g.Config.AgentID,
 		Endpoint: Endpoint{
-			AuthURL:  "https://login.work.weixin.qq.com/wwlogin/sso/login",
-			TokenURL: "https://qyapi.weixin.qq.com/cgi-bin/gettoken",
+			AuthURL: "https://login.work.weixin.qq.com/wwlogin/sso/login",
 		},
 		RedirectURL: g.Config.RedirectURI,
-		//Scopes:      []string{"user:email"},
 	}
 	return oauthConfig.AuthCodeURL("WWLogin")
 }
 
-// 根据回调地址获取code以及获取token，以及用户信息
+// ConnectorReceiver Get the code and get the token according to the callback address,
+// as well as the user's info
 func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string) (userInfo plugin.ExternalLoginUserInfo, err error) {
 	code := ctx.Query("code")
 	proxyURL, err := url.Parse(g.Config.ProxyIP)
@@ -81,7 +80,7 @@ func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string
 	},
 	}
 	// Exchange code for token
-	// 1.通过code获取企业微信的access_token
+	// 1.Get access_token of enterprise weibo via code
 	tokenResp, err := client.Get(fmt.Sprintf(
 		"https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s",
 		g.Config.AppID, g.Config.CropSecret))
@@ -96,7 +95,7 @@ func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string
 	}
 	log.Infof(fmt.Sprintf("access_token=%s", tokenData.AccessToken))
 	defer tokenResp.Body.Close()
-	// 2.通过access_token和code获取userid
+	// 2.Get userid by access_token and code
 	userIDResp, err := client.Get(fmt.Sprintf(
 		"https://qyapi.weixin.qq.com/cgi-bin/auth/getuserinfo?access_token=%s&code=%s",
 		tokenData.AccessToken, code))
@@ -111,7 +110,7 @@ func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string
 	}
 	log.Infof(fmt.Sprintf("UserID = %s, OpenID = %s", userIDData.UserID, userIDData.OpenID))
 	userIDResp.Body.Close()
-	// 3.通过access_token和userid获取用户信息
+	// 3.Get user info by access_token and userid
 	userInfoResp, err := client.Get(fmt.Sprintf(
 		"https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=%s&userid=%s",
 		tokenData.AccessToken, userIDData.UserID))
@@ -128,7 +127,7 @@ func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string
 	fmt.Println(fmt.Sprintf("UserID=%s, Name=%s, Email=%s, Avatar=%s",
 		userInfoData.UserID, userInfoData.Name, userInfoData.Email, userInfoData.Avatar))
 
-	//数据转换
+	// data conversion
 	metaInfo, _ := json.Marshal(userInfoResp)
 	userInfo = plugin.ExternalLoginUserInfo{
 		ExternalID:  fmt.Sprintf("%s", userInfoData.UserID),
@@ -139,8 +138,6 @@ func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string
 		Avatar:      userInfoData.Avatar,
 	}
 
-	// guarantee email was verified
-	//userInfo.Email = g.guaranteeEmail(userInfo.Email, tokenData.AccessToken)
 	return userInfo, nil
 }
 
@@ -238,22 +235,6 @@ var userInfoData struct {
 	Alias     string `json:"alias"`
 }
 
-const (
-	// AuthStyleAutoDetect means to auto-detect which authentication
-	// style the provider wants by trying both ways and caching
-	// the successful way for the future.
-	AuthStyleAutoDetect AuthStyle = 0
-
-	// AuthStyleInParams sends the "client_id" and "client_secret"
-	// in the POST body as application/x-www-form-urlencoded parameters.
-	AuthStyleInParams AuthStyle = 1
-
-	// AuthStyleInHeader sends the client_id and client_password
-	// using HTTP Basic Authorization. This is an optional style
-	// described in the OAuth2 RFC 6749 section 2.3.1.
-	AuthStyleInHeader AuthStyle = 2
-)
-
 type AuthCodeOption interface {
 	setValue(url.Values)
 }
@@ -277,11 +258,7 @@ type Endpoint struct {
 	TokenURL    string
 	UserIDURL   string
 	UserInfoURL string
-
-	AuthStyle AuthStyle
 }
-
-type AuthStyle int
 
 func (c *Config) AuthCodeURL(state string) string {
 	var buf bytes.Buffer
