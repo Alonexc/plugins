@@ -132,8 +132,8 @@ func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string
 	metaInfo, _ := json.Marshal(userInfoResp)
 	userInfo = plugin.ExternalLoginUserInfo{
 		ExternalID:  fmt.Sprintf("%s", userInfoData.UserID),
-		DisplayName: userInfoData.Name,
-		Username:    userInfoData.Name,
+		DisplayName: userInfoData.UserID,
+		Username:    userInfoData.UserID,
 		Email:       userInfoData.Email,
 		MetaInfo:    string(metaInfo),
 		Avatar:      userInfoData.Avatar,
@@ -270,7 +270,6 @@ type Config struct {
 	RedirectURL string
 
 	ProxyIP string
-	//Scopes []string
 }
 
 type Endpoint struct {
@@ -289,23 +288,18 @@ func (c *Config) AuthCodeURL(state string) string {
 	buf.WriteString(c.Endpoint.AuthURL)
 	v := url.Values{
 		"login_type": {"CorpApp"},
-		//"response_type": {"code"},
-		"appid":   {c.AppID},
-		"agentid": {c.AgentID},
+		"appid":      {c.AppID},
+		"agentid":    {c.AgentID},
 	}
 	if c.RedirectURL != "" {
 		v.Set("redirect_uri", c.RedirectURL)
 	}
-	//if len(c.Scopes) > 0 {
-	//	v.Set("scope", strings.Join(c.Scopes, " "))
-	//}
+
 	if state != "" {
 		// TODO(light): Docs say never to omit state; don't allow empty.
 		v.Set("state", state)
 	}
-	//for _, opt := range opts {
-	//	opt.setValue(v)
-	//}
+
 	if strings.Contains(c.Endpoint.AuthURL, "?") {
 		buf.WriteByte('&')
 	} else {
