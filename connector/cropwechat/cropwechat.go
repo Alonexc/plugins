@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
 
 type Connector struct {
@@ -79,6 +80,8 @@ func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string
 		Proxy: http.ProxyURL(proxyURL),
 	},
 	}
+
+	client.Timeout = 15 * time.Second
 	// Exchange code for token
 	// 1.Get access_token of enterprise weibo via code
 	tokenResp, err := client.Get(fmt.Sprintf(
@@ -123,11 +126,15 @@ func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string
 		log.Errorf("user infoData parsing failed: %s", err)
 		return
 	}
+	log.Infof(fmt.Sprintf("UserID=%s, Name=%s, Email=%s, Avatar=%s",
+		userInfoData.UserID, userInfoData.Name, userInfoData.Email, userInfoData.Avatar))
+	userInfoResp.Body.Close()
+
 	if len(userInfoData.Email) == 0 {
 		userInfoData.Email = fmt.Sprintf("%s%s", userInfoData.UserID, "@webank.com")
 	}
-	userInfoResp.Body.Close()
-	fmt.Println(fmt.Sprintf("UserID=%s, Name=%s, Email=%s, Avatar=%s",
+
+	log.Infof(fmt.Sprintf("UserID=%s, Name=%s, Email=%s, Avatar=%s",
 		userInfoData.UserID, userInfoData.Name, userInfoData.Email, userInfoData.Avatar))
 
 	// data conversion
