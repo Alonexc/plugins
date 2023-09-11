@@ -130,21 +130,19 @@ func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string
 		userInfoData.UserID, userInfoData.Name, userInfoData.Email, userInfoData.Avatar))
 	userInfoResp.Body.Close()
 
-	//userInfoData.Email = strings.Join([]string{userInfoData.UserID, "webank.com"}, "@")
-
-	//log.Infof(fmt.Sprintf("UserID=%s, Name=%s, Email=%s, Avatar=%s",
-	//	userInfoData.UserID, userInfoData.Name, userInfoData.Email, userInfoData.Avatar))
-
 	// data conversion
 	metaInfo, _ := json.Marshal(userInfoResp)
 	userInfo = plugin.ExternalLoginUserInfo{
 		ExternalID:  fmt.Sprintf("%s", userInfoData.UserID),
 		DisplayName: userInfoData.UserID,
 		Username:    userInfoData.UserID,
-		Email:       userInfoData.Email,
+		Email:       strings.Join([]string{userInfoData.UserID, "webank.com"}, "@"),
 		MetaInfo:    string(metaInfo),
 		Avatar:      userInfoData.Avatar,
 	}
+
+	log.Infof(fmt.Sprintf("UserID=%s, Name=%s, Email=%s, Avatar=%s",
+		userInfo.ExternalID, userInfo.Username, userInfo.Email, userInfo.Avatar))
 
 	return userInfo, nil
 }
