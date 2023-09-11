@@ -130,10 +130,10 @@ func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string
 		userInfoData.UserID, userInfoData.Name, userInfoData.Email, userInfoData.Avatar))
 	userInfoResp.Body.Close()
 
-	userInfoData.Email = fmt.Sprintf("%s%s", userInfoData.UserID, "@webank.com")
+	//userInfoData.Email = strings.Join([]string{userInfoData.UserID, "webank.com"}, "@")
 
-	log.Infof(fmt.Sprintf("UserID=%s, Name=%s, Email=%s, Avatar=%s",
-		userInfoData.UserID, userInfoData.Name, userInfoData.Email, userInfoData.Avatar))
+	//log.Infof(fmt.Sprintf("UserID=%s, Name=%s, Email=%s, Avatar=%s",
+	//	userInfoData.UserID, userInfoData.Name, userInfoData.Email, userInfoData.Avatar))
 
 	// data conversion
 	metaInfo, _ := json.Marshal(userInfoResp)
