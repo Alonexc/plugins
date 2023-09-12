@@ -1,4 +1,4 @@
-module github.com/answerdev/plugins/connector/cropwechat
+module github.com/webank/plugins/connector/cropwechat
 
 go 1.21.0
 
