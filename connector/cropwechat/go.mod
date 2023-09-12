@@ -1,8 +1,11 @@
-module github.com/answerdev/connector/cropwechat
+module github.com/answerdev/plugins/connector/cropwechat
 
 go 1.21.0
 
-require github.com/answerdev/answer v1.1.3
+require (
+	github.com/answerdev/answer v1.1.3
+	github.com/segmentfault/pacman v1.0.5-0.20230822083413-c0075a2d401f
+)
 
 require (
 	github.com/LinkinStars/go-i18n/v2 v2.2.2 // indirect

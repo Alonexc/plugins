@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/answerdev/answer/plugin"
-	"github.com/answerdev/connector/cropwechat/i18n"
+	"github.com/answerdev/plugins/connector/cropwechat/i18n"
 	"github.com/segmentfault/pacman/log"
 	"net/http"
 	"net/url"
