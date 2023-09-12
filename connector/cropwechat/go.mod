@@ -1,4 +1,4 @@
-module github.com/alonexc/plugins/connector/cropwechat
+module github.com/answerdev/connector/cropwechat
 
 go 1.21.0
 
