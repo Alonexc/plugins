@@ -1,13 +1,13 @@
 plugin:
-  cropwechat_connector:
+  corpwechat_connector:
     backend:
       name:
-        other: CropWechat
+        other: CorpWechat
       info:
         name:
-          other: CropWechat Connector
+          other: CorpWechat Connector
         description:
-          other: Connection crop wechat swipe login.
+          other: Connection corp wechat swipe login.
       config:
         app_id:
           title:
@@ -19,7 +19,7 @@ plugin:
             other: AgentID
           description:
             other: Agent ID of your application
-        crop_secret:
+        corp_secret:
           title:
             other: CorpSecret
           description:

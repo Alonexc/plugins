@@ -1,5 +1,5 @@
 plugin:
-  cropwechat_connector:
+  corpwechat_connector:
     backend:
       name:
         other: 企业微信
@@ -19,7 +19,7 @@ plugin:
             other: 自建应用ID
           description:
             other: 您自建应用的ID
-        crop_secret:
+        corp_secret:
           title:
             other: 企业密钥
           description:

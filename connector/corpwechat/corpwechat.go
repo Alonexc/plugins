@@ -1,10 +1,10 @@
-package cropwechat
+package corpwechat
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/alonexc/plugins/connector/cropwechat/i18n"
+	"github.com/alonexc/plugins/connector/corpwechat/i18n"
 	"github.com/answerdev/answer/plugin"
 	"github.com/segmentfault/pacman/log"
 	"net/http"
@@ -20,7 +20,7 @@ type Connector struct {
 type ConnectorConfig struct {
 	AppID       string `json:"app_id"`
 	AgentID     string `json:"agent_id"`
-	CropSecret  string `json:"crop_secret"`
+	CorpSecret  string `json:"corp_secret"`
 	RedirectURI string `json:"redirect_uri"`
 	ProxyIP     string `json:"proxy_ip"`
 }
@@ -51,7 +51,7 @@ func (g *Connector) ConnectorName() plugin.Translator {
 }
 
 func (g *Connector) ConnectorSlugName() string {
-	return "cropwechat"
+	return "corpwechat"
 }
 
 // ConnectorSender Constructing a code-sweeping login address
@@ -86,7 +86,7 @@ func (g *Connector) ConnectorReceiver(ctx *plugin.GinContext, receiverURL string
 	// 1.Get access_token of enterprise weibo via code
 	tokenResp, err := client.Get(fmt.Sprintf(
 		"https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=%s&corpsecret=%s",
-		g.Config.AppID, g.Config.CropSecret))
+		g.Config.AppID, g.Config.CorpSecret))
 	if err != nil {
 		log.Errorf("failed getting token: %s", err)
 		return
@@ -172,15 +172,15 @@ func (g *Connector) ConfigFields() []plugin.ConfigField {
 			Value: g.Config.AgentID,
 		},
 		{
-			Name:        "crop_secret",
+			Name:        "corp_secret",
 			Type:        plugin.ConfigTypeInput,
-			Title:       plugin.MakeTranslator(i18n.ConfigCropSecretTitle),
-			Description: plugin.MakeTranslator(i18n.ConfigCropSecretDescription),
+			Title:       plugin.MakeTranslator(i18n.ConfigCorpSecretTitle),
+			Description: plugin.MakeTranslator(i18n.ConfigCorpSecretDescription),
 			Required:    true,
 			UIOptions: plugin.ConfigFieldUIOptions{
 				InputType: plugin.InputTypeText,
 			},
-			Value: g.Config.CropSecret,
+			Value: g.Config.CorpSecret,
 		},
 		{
 			Name:        "redirect_uri",
