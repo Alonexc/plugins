@@ -38,7 +38,7 @@ func (g *Connector) Info() plugin.Info {
 		Description: plugin.MakeTranslator(i18n.InfoDescription),
 		Author:      "Alonexc",
 		Version:     "0.0.1",
-		Link:        "https://github.com/Alonexc/plugins/tree/main/connector/cropwechat",
+		Link:        "https://github.com/Alonexc/plugins/tree/main/connector/corpwechat",
 	}
 }
 
