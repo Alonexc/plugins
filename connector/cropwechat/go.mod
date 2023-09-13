@@ -1,10 +1,10 @@
-module github.com/webank/plugins/connector/cropwechat
+module github.com/alonexc/plugins/connector/cropwechat
 
 go 1.21.0
 
 require (
 	github.com/answerdev/answer v1.1.3
-	github.com/segmentfault/pacman v1.0.4
+	github.com/segmentfault/pacman v1.0.5-0.20230822083413-c0075a2d401f
 )
 
 require (
